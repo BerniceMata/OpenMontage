@@ -1,0 +1,19 @@
+# Install torch FIRST with the CUDA index, then this file. See docs/05-STACK-RESEARCH.md.
+# pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
+faster-whisper==1.2.1
+nvidia-cublas-cu12
+nvidia-cudnn-cu12
+scenedetect[opencv]>=0.7.1
+mediapipe
+opencv-python
+pysubs2
+yt-dlp
+ollama
+pydantic>=2
+pyyaml
+fastapi
+uvicorn[standard]
+python-dotenv
+composio
+rapidfuzz
+python-multipart

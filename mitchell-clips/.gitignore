@@ -1,0 +1,11 @@
+.env
+.venv/
+__pycache__/
+data/videos/
+data/transcripts/
+data/clips/
+data/queue/
+data/*.db
+data/*.log
+*.mp4
+*.ass

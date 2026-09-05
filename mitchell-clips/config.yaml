@@ -1,0 +1,95 @@
+# mitchell-clips config. Every behavior knob lives here. Code reads this, never hardcodes.
+
+paths:
+  videos_local: "D:/YouTube/originals"      # CHANGE ME: folder with the original exports
+  data_dir: "./data"
+  ffmpeg: "ffmpeg"                          # or full path to ffmpeg.exe (gyan.dev full build, has libass + nvenc)
+  fonts_dir: "./assets/fonts"
+
+youtube:
+  channel_id: "UCHCo7ZlH2hCEPlBUqp-Zu-A"
+  handle: "@mitchellnicholas2099"
+  use_composio_for_stats: true              # rank videos by views via Composio YOUTUBE_* tools
+  ytdlp_fallback: true                      # download if a local file isn't found
+
+selection:
+  top_n_videos: 10                          # Milestone 1
+  clips_per_video: 2
+  min_clip_seconds: 20
+  max_clip_seconds: 45                      # Mitchell's call. Research says 45-95s wins in this lane; see docs/03
+  window_seconds: 90                        # transcript window size fed to the scorer
+  window_overlap_seconds: 15
+  min_score_to_keep: 7.0                    # 0-10 composite
+  end_at_peak: true                         # trim tail after the emotional peak line
+  reject_if_opens_with_you: true            # "you need to..." openers get rejected
+  reject_abstract_opener: true
+
+llm:
+  provider: "ollama"                        # ollama | anthropic
+  ollama_model: "qwen3:8b"                  # 8GB VRAM. 12GB+: qwen3:14b or gemma4:12b
+  ollama_base_url: "http://localhost:11434"
+  anthropic_model: "claude-sonnet-4-5"      # used only if provider = anthropic
+  temperature: 0.2
+  num_ctx: 8192
+
+transcription:
+  model: "large-v3-turbo"                   # or distil-large-v3
+  device: "cuda"
+  compute_type: "float16"
+  word_timestamps: true
+  vad_filter: true
+
+reframe:
+  output_w: 1080
+  output_h: 1920
+  detector: "mediapipe"                     # mediapipe | center
+  smoothing: "one_euro"                     # one_euro | ema
+  scene_detect: true                        # PySceneDetect AdaptiveDetector, reset tracker on cuts
+  encoder: "h264_nvenc"                     # fallback libx264
+  fps: 30
+
+captions:
+  style: "classic"                          # see prompts/caption_style.md; 2-3 words/line, shadow, no neon
+  words_per_line: 3
+  font: "Inter-SemiBold"
+  font_size: 64
+  position_y_pct: 0.72                      # nonchalant placement, lower third
+  highlight_current_word: true
+  hook_overlay_seconds: 2.0                 # cover text (≤4 words) on screen for first 2s
+  silence_trim: true
+  silence_threshold_db: -35
+  silence_min_ms: 200
+
+caption_text:
+  style: "lowercase_first_person"           # the one sentence the viewer carries
+  max_chars: 300
+  cta_rotation:                             # 7-slot rotation; index = post_number % 7
+    - none
+    - none
+    - question
+    - none
+    - none
+    - youtube_push
+    - none
+  youtube_push_line: "full video on youtube, link in bio"
+  hashtags: false                           # NEVER true
+
+publishing:
+  provider: "composio"
+  ig_user_id: "28108917608702310"           # @mitchloveswords
+  posts_per_day: 3
+  slots_local: ["08:30", "13:00", "19:30"]  # America/Chicago
+  timezone: "America/Chicago"
+  share_to_feed: true
+  require_approval: true                    # NEVER false
+  max_wait_seconds: 180
+  poll_interval_seconds: 5
+
+dashboard:
+  host: "127.0.0.1"
+  port: 8787
+
+scoreboard:
+  pull_insights_hours_after_post: [1, 24, 168]
+  outlier_multiple_flag: 3.0                # views / rolling 30-post median
+  follower_conversion_target_pct: 1.0
